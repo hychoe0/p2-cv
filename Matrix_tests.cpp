@@ -50,6 +50,26 @@ TEST(test_matrix_row_and_col) {
   delete mat; // delete the Matrix
 }
 
+TEST(test_matrix_at) {
+  Matrix *mat = new Matrix;
+
+  const int width = 3;
+  const int height = 5;
+  int row = 2;
+  int column = 1;
+  int* ptr = &mat->data[7];
+
+  Matrix_init(mat, width, height);
+
+  // Printing pointers
+  cout << Matrix_at(mat, row, column) << endl;
+  cout << ptr << endl;
+
+  assert(Matrix_at(mat, row, column) == ptr);
+
+  delete mat; // delete the Matrix
+}
+
 
 // NOTE: The unit test framework tutorial in Lab 2 originally
 // had a semicolon after TEST_MAIN(). Although including and
