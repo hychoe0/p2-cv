@@ -70,20 +70,38 @@ TEST(test_matrix_at) {
   delete mat; // delete the Matrix
 }
 
-TEST(test_matrix_fill) {
+// TEST(test_matrix_fill) {
+//   Matrix *mat = new Matrix;
+
+//   const int width = 3;
+//   const int height = 5;
+//   int value = 37;
+
+//   Matrix_init(mat, width, height);
+//   Matrix_fill(mat, value);
+
+//   // // Printing each elements
+//   // for (int i = 0; i < mat->height * mat->width; ++i) {
+//   //   cout << i << ": " << mat->data[i] << endl;  
+//   // }
+
+//   delete mat; // delete the Matrix
+// }
+
+TEST(test_matrix_fill_border) {
   Matrix *mat = new Matrix;
 
-  const int width = 3;
+  const int width = 5;
   const int height = 5;
   int value = 37;
 
   Matrix_init(mat, width, height);
-  Matrix_fill(mat, value);
+  Matrix_fill_border(mat, value);
 
-  // // Printing each elements
-  // for (int i = 0; i < mat->height * mat->width; ++i) {
-  //   cout << i << ": " << mat->data[i] << endl;  
-  // }
+  // Printing each elements
+  for (int i = 0; i < mat->height * mat->width; ++i) {
+    cout << i << ": " << mat->data[i] << endl;  
+  }
 
   delete mat; // delete the Matrix
 }

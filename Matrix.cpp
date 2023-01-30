@@ -129,7 +129,24 @@ void Matrix_fill(Matrix* mat, int value) {
 //           the given value. These are all elements in the first/last
 //           row or the first/last column.
 void Matrix_fill_border(Matrix* mat, int value) {
-  assert(false); // TODO Replace with your implementation!
+  
+  // Fill first and last row
+  int max_index = mat->width * mat->height - 1;
+
+  for (int i = 0; i < mat->width; ++i) {
+    mat->data[i] = value;
+    mat->data[max_index - i] = value;
+  }
+
+  // Fill first and last column for each row
+  int left_border = mat->width;
+  int right_border = (mat->width * 2) - 1;
+
+  for (int j = 0; j < mat->height - 2; ++j) {
+    mat->data[left_border + (mat->width * j)] = value;
+    mat->data[right_border + (mat->width * j)] = value;
+  }
+
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -158,7 +175,13 @@ int Matrix_max(const Matrix* mat) {
 //           the leftmost one.
 int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
                                       int column_start, int column_end) {
-  assert(false); // TODO Replace with your implementation!
+
+  // To check the REQUIRES Clauses
+  assert(0 <= row && row < Matrix_height(mat));
+  assert(0 <= column_start && column_end <= Matrix_width(mat));
+  assert(column_start < column_end);
+
+  
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -170,5 +193,8 @@ int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
 //           column_start (inclusive) and column_end (exclusive).
 int Matrix_min_value_in_row(const Matrix* mat, int row,
                             int column_start, int column_end) {
-  assert(false); // TODO Replace with your implementation!
+  // To check the REQUIRES Clauses
+  assert(0 <= row && row < Matrix_height(mat));
+  assert(0 <= column_start && column_end <= Matrix_width(mat));
+  assert(column_start < column_end);
 }
