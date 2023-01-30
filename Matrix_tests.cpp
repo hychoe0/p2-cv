@@ -70,6 +70,26 @@ TEST(test_matrix_at) {
   delete mat; // delete the Matrix
 }
 
+TEST(test_matrix_fill) {
+  Matrix *mat = new Matrix;
+
+  const int width = 3;
+  const int height = 5;
+  int value = 37;
+
+  Matrix_init(mat, width, height);
+  Matrix_fill(mat, value);
+
+  // // Printing each elements
+  // for (int i = 0; i < mat->height * mat->width; ++i) {
+  //   cout << i << ": " << mat->data[i] << endl;  
+  // }
+
+  delete mat; // delete the Matrix
+}
+
+
+
 
 // NOTE: The unit test framework tutorial in Lab 2 originally
 // had a semicolon after TEST_MAIN(). Although including and

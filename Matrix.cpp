@@ -87,6 +87,8 @@ int* Matrix_at(Matrix* mat, int row, int column) {
   assert(0 <= row && row < mat->height);
   assert(0 <= column && column < mat->width);
 
+  // Conversion of nth element of 1D array from 2D array:
+  // row * width + column
   int* pointer = &mat->data[row * Matrix_width(mat) + column];
 
   return pointer;
@@ -99,6 +101,13 @@ int* Matrix_at(Matrix* mat, int row, int column) {
 // EFFECTS:  Returns a pointer-to-const to the element in
 //           the Matrix at the given row and column.
 const int* Matrix_at(const Matrix* mat, int row, int column) {
+
+  // To check the REQUIRES clauses
+  assert(0 <= row && row < mat->height);
+  assert(0 <= column && column < mat->width);
+
+  // Conversion of nth element of 1D array from 2D array:
+  // row * width + column
   const int* pointer = &mat->data[row * Matrix_width(mat) + column];
   
   return pointer; 
@@ -108,7 +117,10 @@ const int* Matrix_at(const Matrix* mat, int row, int column) {
 // MODIFIES: *mat
 // EFFECTS:  Sets each element of the Matrix to the given value.
 void Matrix_fill(Matrix* mat, int value) {
-  assert(false); // TODO Replace with your implementation!
+
+  for (int i = 0; i < mat->width * mat->height; ++i) {
+    mat->data[i] = value;
+  }
 }
 
 // REQUIRES: mat points to a valid Matrix
