@@ -17,9 +17,6 @@ void Matrix_init(Matrix* mat, int width, int height) {
 
   mat->width = width;
   mat->height = height;
-  for (int i = 0; i < (width * height); i++) {
-    mat->data[i] = 0;
-  }
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -55,10 +52,11 @@ int Matrix_height(const Matrix* mat) {
 // EFFECTS:  Returns the row of the element pointed to by ptr.
 int Matrix_row(const Matrix* mat, const int* ptr) {
   
+  // Calculating the index of the element
   int index = ptr - mat->data;
 
   int row = index / Matrix_width(mat);
-  
+
   return row;
 
 }

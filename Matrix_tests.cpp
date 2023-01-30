@@ -35,7 +35,7 @@ using namespace std;
 // ADD YOUR TESTS HERE
 // You are encouraged to use any functions from Matrix_test_helpers.h as needed.
 
-TEST(test_matrix_row) {
+TEST(test_matrix_row_and_col) {
   Matrix *mat = new Matrix;
 
   const int width = 3;
@@ -44,11 +44,10 @@ TEST(test_matrix_row) {
 
   Matrix_init(mat, width, height);
 
-  cout << Matrix_row(mat, ptr) << endl;
-  cout << Matrix_column(mat, ptr) << endl;
+  assert(Matrix_row(mat, ptr) == 2);
+  assert(Matrix_column(mat, ptr) == 1);
 
   delete mat; // delete the Matrix
-
 }
 
 
