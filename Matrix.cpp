@@ -87,7 +87,9 @@ int* Matrix_at(Matrix* mat, int row, int column) {
   assert(0 <= row && row < mat->height);
   assert(0 <= column && column < mat->width);
 
-  assert(false);
+  int* pointer = &mat->data[row * Matrix_width(mat) + column];
+
+  return pointer;
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -97,7 +99,9 @@ int* Matrix_at(Matrix* mat, int row, int column) {
 // EFFECTS:  Returns a pointer-to-const to the element in
 //           the Matrix at the given row and column.
 const int* Matrix_at(const Matrix* mat, int row, int column) {
-  assert(false); // TODO Replace with your implementation!
+  const int* pointer = &mat->data[row * Matrix_width(mat) + column];
+  
+  return pointer; 
 }
 
 // REQUIRES: mat points to a valid Matrix
