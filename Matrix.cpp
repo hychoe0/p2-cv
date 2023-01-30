@@ -10,7 +10,16 @@
 // EFFECTS:  Initializes *mat as a Matrix with the given width and height.
 // NOTE:     Do NOT use new or delete here.
 void Matrix_init(Matrix* mat, int width, int height) {
-  assert(false); // TODO Replace with your implementation!
+  
+  // To check the REQUIRES clauses
+  assert(0 < width && width <= MAX_MATRIX_WIDTH);
+  assert(0 < height && height <= MAX_MATRIX_HEIGHT);
+
+  mat->width = width;
+  mat->height = height;
+  for (int i = 0; i < (width * height); i++) {
+    mat->data[i] = 0;
+  }
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -28,27 +37,42 @@ void Matrix_print(const Matrix* mat, std::ostream& os) {
 // REQUIRES: mat points to an valid Matrix
 // EFFECTS:  Returns the width of the Matrix.
 int Matrix_width(const Matrix* mat) {
-  assert(false); // TODO Replace with your implementation!
+  
+  return mat->width;
+
 }
 
 // REQUIRES: mat points to a valid Matrix
 // EFFECTS:  Returns the height of the Matrix.
 int Matrix_height(const Matrix* mat) {
-  assert(false); // TODO Replace with your implementation!
+
+  return mat->height;
+
 }
 
 // REQUIRES: mat points to a valid Matrix
 //           ptr points to an element in the Matrix
 // EFFECTS:  Returns the row of the element pointed to by ptr.
 int Matrix_row(const Matrix* mat, const int* ptr) {
-  assert(false); // TODO Replace with your implementation!
+  
+  int index = ptr - mat->data;
+
+  int row = index / Matrix_width(mat);
+  
+  return row;
+
 }
 
 // REQUIRES: mat points to a valid Matrix
 //           ptr point to an element in the Matrix
 // EFFECTS:  Returns the column of the element pointed to by ptr.
 int Matrix_column(const Matrix* mat, const int* ptr) {
-  assert(false); // TODO Replace with your implementation!
+  
+  // Calculating the index of the element
+  int index = ptr - mat->data;
+
+  return index % Matrix_width(mat);
+
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -60,7 +84,12 @@ int Matrix_column(const Matrix* mat, const int* ptr) {
 // EFFECTS:  Returns a pointer to the element in the Matrix
 //           at the given row and column.
 int* Matrix_at(Matrix* mat, int row, int column) {
-  assert(false); // TODO Replace with your implementation!
+  
+  // To check the REQUIRES clauses
+  assert(0 <= row && row < mat->height);
+  assert(0 <= column && column < mat->width);
+
+  assert(false);
 }
 
 // REQUIRES: mat points to a valid Matrix

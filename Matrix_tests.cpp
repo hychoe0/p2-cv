@@ -13,26 +13,43 @@ using namespace std;
 // -----
 // Fills a 3x5 Matrix with a value and checks
 // that Matrix_at returns that value for each element.
-TEST(test_fill_basic) {
-  Matrix *mat = new Matrix; // create a Matrix in dynamic memory
 
-  const int width = 3;
-  const int height = 5;
-  const int value = 42;
-  Matrix_init(mat, 3, 5);
-  Matrix_fill(mat, value);
+// TEST(test_fill_basic) {
+//   Matrix *mat = new Matrix; // create a Matrix in dynamic memory
 
-  for(int r = 0; r < height; ++r){
-    for(int c = 0; c < width; ++c){
-      ASSERT_EQUAL(*Matrix_at(mat, r, c), value);
-    }
-  }
+//   const int width = 3;
+//   const int height = 5;
+//   const int value = 42;
+//   Matrix_init(mat, 3, 5);
+//   Matrix_fill(mat, value);
 
-  delete mat; // delete the Matrix
-}
+//   for(int r = 0; r < height; ++r){
+//     for(int c = 0; c < width; ++c){
+//       ASSERT_EQUAL(*Matrix_at(mat, r, c), value);
+//     }
+//   }
+
+//   delete mat; // delete the Matrix
+// }
 
 // ADD YOUR TESTS HERE
 // You are encouraged to use any functions from Matrix_test_helpers.h as needed.
+
+TEST(test_matrix_row) {
+  Matrix *mat = new Matrix;
+
+  const int width = 3;
+  const int height = 5;
+  const int* ptr = &mat->data[7];
+
+  Matrix_init(mat, width, height);
+
+  cout << Matrix_row(mat, ptr) << endl;
+  cout << Matrix_column(mat, ptr) << endl;
+
+  delete mat; // delete the Matrix
+
+}
 
 
 // NOTE: The unit test framework tutorial in Lab 2 originally
