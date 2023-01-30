@@ -3,6 +3,8 @@
 #include <cassert>
 #include "Matrix.h"
 
+using namespace std;
+
 // REQUIRES: mat points to a Matrix
 //           0 < width && width <= MAX_MATRIX_WIDTH
 //           0 < height && height <= MAX_MATRIX_HEIGHT
@@ -28,7 +30,18 @@ void Matrix_init(Matrix* mat, int width, int height) {
 //           by a newline. This means there will be an "extra" space at
 //           the end of each line.
 void Matrix_print(const Matrix* mat, std::ostream& os) {
-  assert(false); // TODO Replace with your implementation!
+  
+  int width = mat->width;
+  int height = mat->height;
+
+  os << width << " " << height << endl;
+
+  for (int row = 0; row < height; ++row) {
+    for (int col = 0; col < width; ++col) {
+      os << mat->data[width * row + col] << " ";
+    }
+    os << endl;
+  }
 }
 
 // REQUIRES: mat points to an valid Matrix

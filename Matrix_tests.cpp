@@ -3,6 +3,7 @@
 #include "Matrix.h"
 #include "Matrix_test_helpers.h"
 #include "unit_test_framework.h"
+#include <cassert>
 
 using namespace std;
 
@@ -48,6 +49,31 @@ TEST(test_matrix_row_and_col) {
   assert(Matrix_column(mat, ptr) == 1);
 
   delete mat; // delete the Matrix
+  
+  Matrix *mat2 = new Matrix;
+
+  const int width1 = 7;
+  const int height1 = 4;
+  const int* ptr1 = &mat2->data[0];
+
+  Matrix_init(mat2, width1, height1);
+
+  assert(Matrix_row(mat2, ptr1) == 0);
+  assert(Matrix_column(mat2, ptr1) == 0);
+
+  const int* ptr2 = &mat2->data[6];
+
+  assert(Matrix_row(mat2, ptr2) == 0);
+  assert(Matrix_column(mat2, ptr2) == 6);
+
+  const int* ptr3 = &mat2->data[27];
+
+  assert(Matrix_row(mat2, ptr3) == 3);
+  assert(Matrix_column(mat2, ptr3) == 6);
+
+  delete mat; // delete the Matrix
+
+  
 }
 
 TEST(test_matrix_at) {
@@ -70,41 +96,41 @@ TEST(test_matrix_at) {
   delete mat; // delete the Matrix
 }
 
-// TEST(test_matrix_fill) {
-//   Matrix *mat = new Matrix;
-
-//   const int width = 3;
-//   const int height = 5;
-//   int value = 37;
-
-//   Matrix_init(mat, width, height);
-//   Matrix_fill(mat, value);
-
-//   // // Printing each elements
-//   // for (int i = 0; i < mat->height * mat->width; ++i) {
-//   //   cout << i << ": " << mat->data[i] << endl;  
-//   // }
-
-//   delete mat; // delete the Matrix
-// }
-
-TEST(test_matrix_fill_border) {
+TEST(test_matrix_fill) {
   Matrix *mat = new Matrix;
 
-  const int width = 5;
+  const int width = 3;
   const int height = 5;
   int value = 37;
 
   Matrix_init(mat, width, height);
-  Matrix_fill_border(mat, value);
+  Matrix_fill(mat, value);
 
   // Printing each elements
-  for (int i = 0; i < mat->height * mat->width; ++i) {
-    cout << i << ": " << mat->data[i] << endl;  
-  }
+  Matrix_print(mat, cout);
 
   delete mat; // delete the Matrix
 }
+
+TEST(test_matrix_fill_border) {
+  Matrix *mat = new Matrix;
+
+  const int width = 6;
+  const int height = 5;
+  int value = 37;
+
+  Matrix_init(mat, width, height);
+  
+  //Initializing elements to 0s
+  Matrix_fill(mat, 0);
+  Matrix_fill_border(mat, value);
+
+  Matrix_print(mat, cout);
+
+  delete mat; // delete the Matrix
+}
+
+
 
 
 
