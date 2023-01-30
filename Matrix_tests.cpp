@@ -72,8 +72,6 @@ TEST(test_matrix_row_and_col) {
   assert(Matrix_column(mat2, ptr3) == 6);
 
   delete mat; // delete the Matrix
-
-  
 }
 
 TEST(test_matrix_at) {
@@ -120,7 +118,7 @@ TEST(test_matrix_fill_border) {
   int value = 37;
 
   Matrix_init(mat, width, height);
-  
+
   //Initializing elements to 0s
   Matrix_fill(mat, 0);
   Matrix_fill_border(mat, value);
@@ -130,6 +128,50 @@ TEST(test_matrix_fill_border) {
   delete mat; // delete the Matrix
 }
 
+TEST(test_matrix_coluimn_of_min_value_in_row) {
+  Matrix *mat = new Matrix;
+
+  const int width = 6;
+  const int height = 5;
+
+  Matrix_init(mat, width, height);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat, 0);
+
+  // Test Case #1 (General)
+  int row1 = 2;
+  int col_start1 = 1;
+  int col_end1 = 4;
+  mat->data[13] = 2;
+  mat->data[14] = 4;
+  mat->data[15] = 1;
+  mat->data[16] = 3;
+
+  // Matrix_print(mat, cout);
+  
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, row1, col_start1, col_end1), 3);
+
+  // Test Case #2 (Edge)
+  // Testing Negative Number and the leftmost minimums
+
+  int row2 = 1;
+  int col_start2 = 0;
+  int col_end2 = 5;
+  mat->data[6] = -1;
+  mat->data[7] = 1;
+  mat->data[8] = -1;
+  mat->data[9] = 1;
+  mat->data[10] = -1;
+
+  Matrix_print(mat, cout);
+  
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, row2, col_start2, col_end2), 0);
+
+  cout << Matrix_column_of_min_value_in_row(mat, row2, col_start2, col_end2) << endl;
+
+  delete mat; // delete the Matrix
+}
 
 
 

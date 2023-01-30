@@ -10,7 +10,12 @@
 // EFFECTS:  Initializes the Image with the given width and height.
 // NOTE:     Do NOT use new or delete here.
 void Image_init(Image* img, int width, int height) {
-  assert(false); // TODO Replace with your implementation!
+  
+  // To check the REQUIRES Clauses
+  assert(0 < width && width <= MAX_MATRIX_WIDTH); 
+  assert(0 < height && height <= MAX_MATRIX_HEIGHT);
+
+  
 }
 
 // REQUIRES: img points to an Image

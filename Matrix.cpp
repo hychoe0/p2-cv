@@ -230,6 +230,7 @@ int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
 //           column_start (inclusive) and column_end (exclusive).
 int Matrix_min_value_in_row(const Matrix* mat, int row,
                             int column_start, int column_end) {
+                              
   // To check the REQUIRES Clauses
   assert(0 <= row && row < Matrix_height(mat));
   assert(0 <= column_start && column_end <= Matrix_width(mat));
