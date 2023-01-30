@@ -123,7 +123,15 @@ void Matrix_fill_border(Matrix* mat, int value) {
 // REQUIRES: mat points to a valid Matrix
 // EFFECTS:  Returns the value of the maximum element in the Matrix
 int Matrix_max(const Matrix* mat) {
-  assert(false); // TODO Replace with your implementation!
+  int greatest = mat->data[0];
+
+  for (int i = 0; i < mat->height * mat->width; ++i) {
+    if (greatest < mat->data[i]) {
+      greatest = mat->data[i];
+    }
+  }
+
+  return greatest;
 }
 
 // REQUIRES: mat points to a valid Matrix
