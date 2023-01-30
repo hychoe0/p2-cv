@@ -181,7 +181,31 @@ int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
   assert(0 <= column_start && column_end <= Matrix_width(mat));
   assert(column_start < column_end);
 
-  
+  // Starting index of column_start
+  int index = (row * Matrix_width(mat)) + column_start;
+    
+    int temp = 0;
+    
+    // Initializing minimum value to the first element
+    int min = mat->data[index];
+    
+    // Loop until (column_end - 1) value
+    for (int i = 1; i < (column_end - column_start); ++i){
+        
+        // If the value of the element is smaller than min
+        if (mat->data[index + i] < min){
+
+          // Set the min value
+          min = mat->data[index + i];
+
+          // Store "i" because it is the index of the particular region
+          temp = i;
+        }
+    }
+    
+    int min_column = column_start + temp;
+
+    return min_column;
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -197,4 +221,10 @@ int Matrix_min_value_in_row(const Matrix* mat, int row,
   assert(0 <= row && row < Matrix_height(mat));
   assert(0 <= column_start && column_end <= Matrix_width(mat));
   assert(column_start < column_end);
+  
+  // First index of the given row
+  int firstIndex = Matrix_width(mat) * row;
+    
+  int minValue = mat->data[firstIndex + Matrix_column_of_min_value_in_row(mat, row, column_start, column_end)];
+  return minValue;
 }
