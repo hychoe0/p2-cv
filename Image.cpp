@@ -40,12 +40,18 @@ void Image_init(Image* img, std::istream& is) {
   int height;
   string junk;
 
+  int r, g, b;
+
   is >> junk >> width >> height >> junk;
+
+  Image_init(img, width, height);
 
   for (int row = 0; row < width; ++row) {
     for (int col = 0; col < height; ++col) {
+      is >> r >> g >> b;
       
-      
+      Pixel color = {r, g, b};
+      Image_set_pixel(img, row, col, color);
     }
   }
 }
@@ -139,12 +145,9 @@ void Image_set_pixel(Image* img, int row, int column, Pixel color) {
 // EFFECTS:  Sets each pixel in the image to the given color.
 void Image_fill(Image* img, Pixel color) {
   
-  int width = Image_width(img);
-  int height = Image_height(img);
-  
   // For each row and column, set the given color to the image
-  for (int row = 0; row < width; ++row) {
-    for (int col = 0; col < height; ++col) {
+  for (int row = 0; row < Image_height(img); ++row) {
+    for (int col = 0; col < Image_width(img); ++col) {
       Image_set_pixel(img, row, col, color);
     }
   }
