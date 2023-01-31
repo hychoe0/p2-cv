@@ -15,7 +15,8 @@ void Image_init(Image* img, int width, int height) {
   assert(0 < width && width <= MAX_MATRIX_WIDTH); 
   assert(0 < height && height <= MAX_MATRIX_HEIGHT);
 
-  
+  img->width = width;
+  img->height = height;
 }
 
 // REQUIRES: img points to an Image
