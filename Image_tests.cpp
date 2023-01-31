@@ -17,6 +17,7 @@ using namespace std;
 // -----
 // Sets various pixels in a 2x2 Image and checks
 // that Image_print produces the correct output.
+
 TEST(test_print_basic) {
   Image *img = new Image; // create an Image in dynamic memory
 
@@ -45,8 +46,55 @@ TEST(test_print_basic) {
   delete img; // delete the Image
 }
 
-// IMPLEMENT YOUR TEST FUNCTIONS HERE
-// You are encouraged to use any functions from Image_test_helpers.h as needed.
+// TEST(test_print) {
+//   Image *img = new Image; // create an Image in dynamic memory
+
+//   const Pixel red = {255, 0, 0};
+//   const Pixel green = {0, 255, 0};
+//   const Pixel blue = {0, 0, 255};
+//   //const Pixel white = {255, 255, 255};
+
+//   const int width = 3;
+//   const int height = 4;
+//   Image_init(img, width, height);
+//   Image_set_pixel(img, 0, 0, red);
+//   Image_set_pixel(img, 0, 1, green);
+//   Image_set_pixel(img, 0, 2, blue);
+//   // Image_set_pixel(img, 0, 3, white);
+
+//   Image_print(img, cout);
+
+//   ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 0), red));
+//   ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 1), green));
+//   ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 2), blue));
+//   // ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 3), white));
+
+//   delete img; // delete the Image
+// }
+
+TEST(test_Image_fill) {
+  Image *img = new Image; // create an Image in dynamic memory
+
+  Pixel red = {255, 0, 0};
+
+  const int width = 3;
+  const int height = 3;
+  Image_init(img, 3, 3);
+
+  Image_fill(img, red);
+
+  Image_print(img, cout);
+  
+  // Checking every pixel in the Image
+  for (int row = 0; row < width; ++row) {
+    for (int col = 0; col < height; ++col) {
+      ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, row, col), red));
+    }
+  }
+
+  delete img; // delete the Image
+}
+
 
 // NOTE: The unit test framework tutorial in Lab 2 originally
 // had a semicolon after TEST_MAIN(). Although including and

@@ -15,61 +15,53 @@ using namespace std;
 // Fills a 3x5 Matrix with a value and checks
 // that Matrix_at returns that value for each element.
 
-// TEST(test_fill_basic) {
-//   Matrix *mat = new Matrix; // create a Matrix in dynamic memory
+TEST(test_fill_basic) {
+  Matrix *mat = new Matrix; // create a Matrix in dynamic memory
 
-//   const int width = 3;
-//   const int height = 5;
-//   const int value = 42;
-//   Matrix_init(mat, 3, 5);
-//   Matrix_fill(mat, value);
+  const int width = 3;
+  const int height = 5;
+  const int value = 42;
+  Matrix_init(mat, 3, 5);
+  Matrix_fill(mat, value);
 
-//   for(int r = 0; r < height; ++r){
-//     for(int c = 0; c < width; ++c){
-//       ASSERT_EQUAL(*Matrix_at(mat, r, c), value);
-//     }
-//   }
+  for(int r = 0; r < height; ++r){
+    for(int c = 0; c < width; ++c){
+      ASSERT_EQUAL(*Matrix_at(mat, r, c), value);
+    }
+  }
 
-//   delete mat; // delete the Matrix
-// }
+  delete mat; // delete the Matrix
+}
 
-// ADD YOUR TESTS HERE
-// You are encouraged to use any functions from Matrix_test_helpers.h as needed.
+// ADDITIONAL TESTS
 
 TEST(test_matrix_row_and_col) {
   Matrix *mat = new Matrix;
 
   const int width = 3;
   const int height = 5;
-  const int* ptr = &mat->data[7];
 
   Matrix_init(mat, width, height);
 
+  // General
+  const int* ptr = Matrix_at(mat, 2, 1);
   assert(Matrix_row(mat, ptr) == 2);
   assert(Matrix_column(mat, ptr) == 1);
 
-  delete mat; // delete the Matrix
-  
-  Matrix *mat2 = new Matrix;
+  // General
+  const int* ptr2 = Matrix_at(mat, 3, 2);
+  assert(Matrix_row(mat, ptr2) == 3);
+  assert(Matrix_column(mat, ptr2) == 2);
 
-  const int width1 = 7;
-  const int height1 = 4;
-  const int* ptr1 = &mat2->data[0];
+  // Edge
+  const int* ptr3 = Matrix_at(mat, 0, 0);
+  assert(Matrix_row(mat, ptr3) == 0);
+  assert(Matrix_column(mat, ptr3) == 0);
 
-  Matrix_init(mat2, width1, height1);
-
-  assert(Matrix_row(mat2, ptr1) == 0);
-  assert(Matrix_column(mat2, ptr1) == 0);
-
-  const int* ptr2 = &mat2->data[6];
-
-  assert(Matrix_row(mat2, ptr2) == 0);
-  assert(Matrix_column(mat2, ptr2) == 6);
-
-  const int* ptr3 = &mat2->data[27];
-
-  assert(Matrix_row(mat2, ptr3) == 3);
-  assert(Matrix_column(mat2, ptr3) == 6);
+  // Edge
+  const int* ptr4 = Matrix_at(mat, 1, 0);
+  assert(Matrix_row(mat, ptr4) == 1);
+  assert(Matrix_column(mat, ptr4) == 0);
 
   delete mat; // delete the Matrix
 }
@@ -143,12 +135,10 @@ TEST(test_matrix_coluimn_of_min_value_in_row) {
   int row1 = 2;
   int col_start1 = 1;
   int col_end1 = 4;
-  mat->data[13] = 2;
-  mat->data[14] = 4;
-  mat->data[15] = 1;
-  mat->data[16] = 3;
-
-  // Matrix_print(mat, cout);
+  *Matrix_at(mat, 2, 1) = 2;
+  *Matrix_at(mat, 2, 2) = 4;
+  *Matrix_at(mat, 2, 3) = 1;
+  *Matrix_at(mat, 2, 4) = 3;
   
   ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, row1, col_start1, col_end1), 3);
 
@@ -173,7 +163,29 @@ TEST(test_matrix_coluimn_of_min_value_in_row) {
   delete mat; // delete the Matrix
 }
 
+TEST(test_matrix_min_value_in_row) {
+  Matrix *mat = new Matrix;
 
+  const int width = 6;
+  const int height = 5;
+  const int value = 0;
+  Matrix_init(mat, width, height);
+  Matrix_fill(mat, value);
+
+  mat->data[6] = -1;
+  mat->data[7] = 1;
+  mat->data[8] = -1;
+  mat->data[9] = 1;
+  mat->data[10] = -1;
+
+  Matrix_print(mat, cout);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat, 1, 0, 5), -1);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat, 1, 0, 6), -1);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat, 1, 2, 3), -1);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat, 1, 2, 4), -1);
+
+  delete mat; // delete the Matrix
+}
 
 
 

@@ -116,8 +116,8 @@ int* Matrix_at(Matrix* mat, int row, int column) {
 const int* Matrix_at(const Matrix* mat, int row, int column) {
 
   // To check the REQUIRES clauses
-  assert(0 <= row && row < mat->height);
-  assert(0 <= column && column < mat->width);
+  assert(0 <= row && row < Matrix_height(mat));
+  assert(0 <= column && column < Matrix_width(mat));
 
   // Conversion of nth element of 1D array from 2D array:
   // row * width + column
@@ -238,7 +238,10 @@ int Matrix_min_value_in_row(const Matrix* mat, int row,
   
   // First index of the given row
   int firstIndex = Matrix_width(mat) * row;
-    
-  int minValue = mat->data[firstIndex + Matrix_column_of_min_value_in_row(mat, row, column_start, column_end)];
+  
+  int columnVal = Matrix_column_of_min_value_in_row(mat, row, column_start, column_end);
+
+  int minValue = mat->data[firstIndex + columnVal];
+
   return minValue;
 }

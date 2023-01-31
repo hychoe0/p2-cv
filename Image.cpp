@@ -39,10 +39,6 @@ void Image_init(Image* img, std::istream& is) {
   int width;
   int height;
   string junk;
-  
-  int r;
-  int g;
-  int b;
 
   is >> junk >> width >> height >> junk;
 
@@ -78,9 +74,9 @@ void Image_print(const Image* img, std::ostream& os) {
 
   for (int row = 0; row < width; ++row) {
     for (int col = 0; col < height; ++col) {
-      os << Matrix_at(&img->red_channel, row, col) << " ";
-      os << Matrix_at(&img->green_channel, row, col) << " ";
-      os << Matrix_at(&img->blue_channel, row, col) << " ";
+      os << *Matrix_at(&img->red_channel, row, col) << " ";
+      os << *Matrix_at(&img->green_channel, row, col) << " ";
+      os << *Matrix_at(&img->blue_channel, row, col) << " ";
     }
     os << endl;
   }
@@ -111,6 +107,14 @@ Pixel Image_get_pixel(const Image* img, int row, int column) {
   // To check the REQUIRES Clauses
   assert(0 <= row && row < Image_height(img));
   assert(0 <= column && column < Image_width(img));
+
+  Pixel rgb;
+
+  rgb.r = *Matrix_at(&img->red_channel, row, column);
+  rgb.g = *Matrix_at(&img->green_channel, row, column);
+  rgb.b = *Matrix_at(&img->blue_channel, row, column);
+
+  return rgb;
 }
 
 // REQUIRES: img points to a valid Image
@@ -120,12 +124,29 @@ Pixel Image_get_pixel(const Image* img, int row, int column) {
 // EFFECTS:  Sets the pixel in the Image at the given row and column
 //           to the given color.
 void Image_set_pixel(Image* img, int row, int column, Pixel color) {
-  assert(false); // TODO Replace with your implementation!
+  
+  // To check the REQUIRES Clauses
+  assert(0 <= row && row < Image_height(img));
+  assert(0 <= column && column < Image_width(img));
+
+  *Matrix_at(&img->red_channel, row, column) = color.r;
+  *Matrix_at(&img->green_channel, row, column) = color.g;
+  *Matrix_at(&img->blue_channel, row, column) = color.b;
 }
 
 // REQUIRES: img points to a valid Image
 // MODIFIES: *img
 // EFFECTS:  Sets each pixel in the image to the given color.
 void Image_fill(Image* img, Pixel color) {
-  assert(false); // TODO Replace with your implementation!
+  
+  int width = Image_width(img);
+  int height = Image_height(img);
+  
+  // For each row and column, set the given color to the image
+  for (int row = 0; row < width; ++row) {
+    for (int col = 0; col < height; ++col) {
+      Image_set_pixel(img, row, col, color);
+    }
+  }
+
 }
