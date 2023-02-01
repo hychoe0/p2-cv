@@ -92,33 +92,31 @@ void compute_energy_matrix(const Image* img, Matrix* energy) {
 
   int width = Image_width(img);
   int height = Image_height(img);
-  int maxEnergy = 0;
   
+  // Initialize the energy Matrix with the same size as the Image
   Matrix_init(energy, width, height);
+
+  // Fill it with zeros
   Matrix_fill(energy, 0);
   
-  for (int row = 0; row < height; ++row){
-    for (int col = 0; col < width; ++ col){
-      if (row > 0 && col > 0 && row != height - 1 && col != width - 1){
-        Pixel pixN = Image_get_pixel(img, row - 1, col);
-        Pixel pixS = Image_get_pixel(img, row + 1, col);
+  // Compute energy for each non-border pixel
+  for (int row = 1; row < height - 1; ++row){
+    for (int col = 1; col < width - 1; ++ col){
         Pixel pixW = Image_get_pixel(img, row, col - 1);
         Pixel pixE = Image_get_pixel(img, row, col + 1);
+        Pixel pixN = Image_get_pixel(img, row - 1, col);
+        Pixel pixS = Image_get_pixel(img, row + 1, col);
         
-        int energyOfPixel = squared_difference(pixN, pixS)
+        int pixelEnergy = squared_difference(pixN, pixS)
                             + squared_difference(pixW, pixE);
         
-        *Matrix_at(energy, row, col) = energyOfPixel;
-        
-        if (*Matrix_at(energy, row, col) > maxEnergy){
-          maxEnergy = *Matrix_at(energy, row, col);
-        }
-      }
+        *Matrix_at(energy, row, col) = pixelEnergy;
     }
   }
 
+  // Get the maxEnergy of the energy Matrix
+  int maxEnergy = Matrix_max(energy);
   Matrix_fill_border(energy, maxEnergy);
-
 }
 
 
@@ -136,28 +134,52 @@ void compute_vertical_cost_matrix(const Matrix* energy, Matrix *cost) {
   int width = Matrix_width(energy);
   int height = Matrix_height(energy);
   
+  // Initialize the cost Matrix with the same size as the energy Matrix
   Matrix_init(cost, width, height);
   
-  for (int i = 0; i < height; ++i){
+  // Fill in costs for the first row ("width" times)
+  for (int i = 0; i < width; ++i){
     *Matrix_at(cost, 0, i) = *Matrix_at(energy, 0, i);
   }
   
-  for (int rowsLeft = 1; rowsLeft < height; rowsLeft++){
-    for (int col = 0; col < width; col++){
-      int pixelCost = 0;
+  for (int row = 1; row < height; ++row){
+    for (int col = 0; col < width; ++col){
       
-      if (col == 0){
-        pixelCost = *Matrix_at(energy, rowsLeft, col) + Matrix_min_value_in_row(cost, rowsLeft - 1, col, col + 2);
-        *Matrix_at(cost, rowsLeft, col) = pixelCost;
+      // col_start is inclusive
+      // col_end is exclusive
+      int col_start;
+      int col_end;
+
+      if (col == 0) {
+        col_start = 0;
+        col_end = col + 2; // or just 2
       }
-      else if (col == width - 1){
-        pixelCost = *Matrix_at(energy, rowsLeft, col) + Matrix_min_value_in_row(cost, rowsLeft - 1, col - 1, col + 1);
-        *Matrix_at(cost, rowsLeft, col) = pixelCost;
+      else if (col == width - 1) {
+        col_start = col - 1;
+        col_end = width; // last index
       }
       else {
-        pixelCost = *Matrix_at(energy, rowsLeft, col) + Matrix_min_value_in_row(cost, rowsLeft - 1, col - 1, col + 2);
-        *Matrix_at(cost, rowsLeft, col) = pixelCost;
+        col_start = col - 1; 
+        col_end = col + 2; 
       }
+      *Matrix_at(cost, row, col) = *Matrix_at(energy, row, col) 
+                                  + Matrix_min_value_in_row(cost, row - 1,
+                                                            col_start, col_end);
+      
+      // int pixelCost = 0;
+      
+      // if (col == 0){
+      //   pixelCost = *Matrix_at(energy, row, col) + Matrix_min_value_in_row(cost, row - 1, col, col + 2);
+      //   *Matrix_at(cost, row, col) = pixelCost;
+      // }
+      // else if (col == width - 1){
+      //   pixelCost = *Matrix_at(energy, row, col) + Matrix_min_value_in_row(cost, row - 1, col - 1, col + 1);
+      //   *Matrix_at(cost, row, col) = pixelCost;
+      // }
+      // else {
+      //   pixelCost = *Matrix_at(energy, row, col) + Matrix_min_value_in_row(cost, row - 1, col - 1, col + 2);
+      //   *Matrix_at(cost, row, col) = pixelCost;
+      // }
     }
   }
 }
@@ -270,13 +292,14 @@ void seam_carve_width(Image *img, int newWidth) {
 
   int height = Image_height(img);
   int width = Image_width(img);
+
+  // Create a new seam
+  int* seam = new int[height];
   
-  while (width != newWidth) {
+  while (width > newWidth) {
 
     Matrix *energy = new Matrix;
     Matrix *cost = new Matrix;
-
-    int *seam = new int[height];
 
     Matrix_init(energy, width, height);
     Matrix_init(cost, width, height);
@@ -289,10 +312,14 @@ void seam_carve_width(Image *img, int newWidth) {
 
     remove_vertical_seam(img, seam);
 
-    delete[] seam;
-    delete energy;
+    width = Image_width(img);
+
     delete cost;
+    delete energy;
   }
+
+  delete[] seam;
+
 }
 
 // REQUIRES: img points to a valid Image
