@@ -78,7 +78,7 @@ style :
 	@echo "EECS 280 style checks PASS"
 
 sync :
-	rsync \
+	  rsync \
   -rtv \
   --delete \
   --exclude '.git*' \
