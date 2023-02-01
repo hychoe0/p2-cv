@@ -86,8 +86,8 @@ TEST(test_Image_fill) {
   Image_print(img, cout);
   
   // Checking every pixel in the Image
-  for (int row = 0; row < width; ++row) {
-    for (int col = 0; col < height; ++col) {
+  for (int row = 0; row < height; ++row) {
+    for (int col = 0; col < width; ++col) {
       ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, row, col), red));
     }
   }
