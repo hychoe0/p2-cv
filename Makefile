@@ -76,3 +76,12 @@ style :
     --files $(FILES)
 	@echo "########################################"
 	@echo "EECS 280 style checks PASS"
+
+sync :
+	rsync \
+  -rtv \
+  --delete \
+  --exclude '.git*' \
+  --filter=':- .gitignore' \
+  ../p2-cv/ \
+  hychoe@login.engin.umich.edu:p2-cv/
