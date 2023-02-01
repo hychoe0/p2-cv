@@ -35,6 +35,7 @@ TEST(test_fill_basic) {
 
 // ADDITIONAL TESTS
 
+// Basic Test for returning row and column
 TEST(test_matrix_row_and_col) {
   Matrix *mat = new Matrix;
 
@@ -67,22 +68,50 @@ TEST(test_matrix_row_and_col) {
   delete mat; // delete the Matrix
 }
 
-// TEST(test_matrix_at) {
-//   Matrix *mat = new Matrix;
+// Basic Test for returning width and height after initialization
+TEST(test_matrix_init_) {
+  Matrix *mat = new Matrix;
 
-//   const int width = 3;
-//   const int height = 5;
-//   int row = 2;
-//   int column = 1;
-//   int* ptr = &mat->data[7];
+  const int width = 4;
+  const int height = 6;
 
-//   // Initializing Matrix
-//   Matrix_init(mat, width, height);
+  // Initializing Matrix
+  Matrix_init(mat, width, height);
 
-//   assert(Matrix_at(mat, row, column) == ptr);
+  // General
+  ASSERT_EQUAL(Matrix_width(mat), width);
+  ASSERT_EQUAL(Matrix_height(mat), height);
 
-//   delete mat; // delete the Matrix
-// }
+  delete mat; // delete the Matrix
+
+  Matrix *mat2 = new Matrix;
+
+  const int width1 = 1;
+  const int height1 = 1;
+
+  // Initializing Matrix
+  Matrix_init(mat2, width1, height1);
+
+  // Testing Minimum Width and Height
+  ASSERT_EQUAL(Matrix_width(mat2), width1);
+  ASSERT_EQUAL(Matrix_height(mat2), height1);
+
+  delete mat2; // delete the Matrix
+
+  Matrix *mat3 = new Matrix;
+
+  const int width2 = MAX_MATRIX_WIDTH;
+  const int height2 = MAX_MATRIX_HEIGHT;
+
+  //Initializing Matrix
+  Matrix_init(mat3, width2, height2);
+
+  // Testing Maximum Width and Height
+  ASSERT_EQUAL(Matrix_width(mat3), width2);
+  ASSERT_EQUAL(Matrix_height(mat3), height2);
+
+  delete mat3; // delete the Matrix
+}
 
 TEST(test_matrix_fill) {
   Matrix *mat = new Matrix;
@@ -94,8 +123,12 @@ TEST(test_matrix_fill) {
   Matrix_init(mat, width, height);
   Matrix_fill(mat, value);
 
-  // Printing each elements
-  Matrix_print(mat, cout);
+  // Test every element in the matrix
+  for (int row = 0; row < height; ++row) {
+    for (int col = 0; col < width; ++col) {
+      ASSERT_EQUAL(*Matrix_at(mat, row, col), value);
+    }
+  }
 
   delete mat; // delete the Matrix
 }
@@ -113,12 +146,103 @@ TEST(test_matrix_fill_border) {
   Matrix_fill(mat, 0);
   Matrix_fill_border(mat, value);
 
-  Matrix_print(mat, cout);
+  // Test every element at the border of the matrix
+  for (int row = 0; row < height; ++row) {
+    for (int col = 0; col < width; ++col) {
+      if (row == 0 || col == 0 || row == height - 1 || col == width - 1) {
+        ASSERT_EQUAL(*Matrix_at(mat, row, col), value);
+      }
+    }
+  }
 
   delete mat; // delete the Matrix
 }
 
-TEST(test_matrix_coluimn_of_min_value_in_row) {
+TEST(test_matrix_max) {
+
+  // Test Case #1
+  Matrix *mat = new Matrix;
+
+  const int width = 2;
+  const int height = 2;
+
+  Matrix_init(mat, width, height);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat, 0);
+
+  // Test Case #1-1 (General 2 x 2)
+  *Matrix_at(mat, 0, 0) = 2;
+  *Matrix_at(mat, 0, 1) = 4;
+  *Matrix_at(mat, 1, 0) = 1;
+  *Matrix_at(mat, 1, 1) = 3;
+  
+  ASSERT_EQUAL(Matrix_max(mat), 4);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat, 0);
+
+  // Test Case #1-2 (Edge 2 x 2)
+  *Matrix_at(mat, 0, 0) = 4;
+  *Matrix_at(mat, 0, 1) = 1;
+  *Matrix_at(mat, 1, 0) = 1;
+  *Matrix_at(mat, 1, 1) = 0;
+
+  ASSERT_EQUAL(Matrix_max(mat), 4);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat, 0);
+
+  // Test Case #1-3 (Multiple Edges 2 x 2)
+  *Matrix_at(mat, 0, 0) = 4;
+  *Matrix_at(mat, 0, 1) = 3;
+  *Matrix_at(mat, 1, 0) = 3;
+  *Matrix_at(mat, 1, 1) = 4;
+
+  ASSERT_EQUAL(Matrix_max(mat), 4);
+
+  delete mat;
+
+  // Test Case #2
+  Matrix *mat1 = new Matrix;
+
+  const int width1 = 5;
+  const int height1 = 4;
+
+  Matrix_init(mat1, width1, height1);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat1, 30);
+
+  // Test Case #2-1 (General 5 x 4)
+  *Matrix_at(mat1, 3, 2) = 31;
+  ASSERT_EQUAL(Matrix_max(mat1), 31);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat1, 30);
+
+  // Test Case #2-2 (First Edge 5 x 4)
+  *Matrix_at(mat1, 0, 0) = 31;
+  ASSERT_EQUAL(Matrix_max(mat1), 31);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat1, 30);
+
+  // Test Case #2-2 (Last Edge 5 x 4)
+  *Matrix_at(mat1, 3, 4) = 31;
+  ASSERT_EQUAL(Matrix_max(mat1), 31);
+
+  //Initializing elements to 0s
+  Matrix_fill(mat1, 30);
+
+  // Test Case #2-3 (Multiple Edges 5 x 4)
+  *Matrix_at(mat1, 2, 4) = 31;
+  *Matrix_at(mat1, 0, 4) = 31;
+  *Matrix_at(mat1, 2, 0) = 31;
+  ASSERT_EQUAL(Matrix_max(mat1), 31);
+}
+
+TEST(test_matrix_column_of_min_value_in_row) {
   Matrix *mat = new Matrix;
 
   const int width = 6;
@@ -151,12 +275,23 @@ TEST(test_matrix_coluimn_of_min_value_in_row) {
   *Matrix_at(mat, 1, 2) = -1;
   *Matrix_at(mat, 1, 3) = 1;
   *Matrix_at(mat, 1, 4) = -1;
-
-  Matrix_print(mat, cout);
   
   ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, row2, col_start2, col_end2), 0);
 
-  cout << Matrix_column_of_min_value_in_row(mat, row2, col_start2, col_end2) << endl;
+  // Test Case #3 (Edge)
+  // Testing Last Edge in the given row
+
+  int row3 = 0;
+  int col_start3 = 0;
+  int col_end3 = 6;
+  *Matrix_at(mat, 0, 0) = 4;
+  *Matrix_at(mat, 0, 1) = 4;
+  *Matrix_at(mat, 0, 2) = 5;
+  *Matrix_at(mat, 0, 3) = 12;
+  *Matrix_at(mat, 0, 4) = 23;
+  *Matrix_at(mat, 0, 5) = 3;
+  
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, row3, col_start3, col_end3), 5);
 
   delete mat; // delete the Matrix
 }
@@ -167,7 +302,10 @@ TEST(test_matrix_min_value_in_row) {
   const int width = 6;
   const int height = 5;
   const int value = 0;
+
   Matrix_init(mat, width, height);
+
+  // Initializing the matrix to 0s
   Matrix_fill(mat, value);
 
   *Matrix_at(mat, 1, 0) = -1;
@@ -176,7 +314,6 @@ TEST(test_matrix_min_value_in_row) {
   *Matrix_at(mat, 1, 3) = 1;
   *Matrix_at(mat, 1, 4) = -1;
 
-  Matrix_print(mat, cout);
   ASSERT_EQUAL(Matrix_min_value_in_row(mat, 1, 0, 5), -1);
   ASSERT_EQUAL(Matrix_min_value_in_row(mat, 1, 0, 6), -1);
   ASSERT_EQUAL(Matrix_min_value_in_row(mat, 1, 2, 3), -1);
