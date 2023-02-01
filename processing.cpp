@@ -268,25 +268,31 @@ void seam_carve_width(Image *img, int newWidth) {
   // To check the REQUIRES Clauses
   assert(0 < newWidth && newWidth <= Image_width(img));
 
-  Matrix *energy = new Matrix;
-  Matrix *cost = new Matrix;
-
   int height = Image_height(img);
-  int seam[MAX_MATRIX_HEIGHT];
+  int width = Image_width(img);
+  
+  while (width != newWidth) {
 
-  Matrix_init(energy, newWidth, height);
-  Matrix_init(cost, newWidth, height);
+    Matrix *energy = new Matrix;
+    Matrix *cost = new Matrix;
 
-  compute_energy_matrix(img, energy);
+    int *seam = new int[height];
 
-  compute_vertical_cost_matrix(energy, cost);
+    Matrix_init(energy, width, height);
+    Matrix_init(cost, width, height);
 
-  find_minimal_vertical_seam(cost, seam);
+    compute_energy_matrix(img, energy);
 
-  remove_vertical_seam(img, seam);
+    compute_vertical_cost_matrix(energy, cost);
 
-  delete energy;
-  delete cost;
+    find_minimal_vertical_seam(cost, seam);
+
+    remove_vertical_seam(img, seam);
+
+    delete[] seam;
+    delete energy;
+    delete cost;
+  }
 }
 
 // REQUIRES: img points to a valid Image
