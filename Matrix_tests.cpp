@@ -324,7 +324,81 @@ TEST(test_matrix_min_value_in_row) {
   delete mat; // delete the Matrix
 }
 
+TEST(test_matrix_irr_shapes) {
 
+  // 1 x 5 Matrix
+  Matrix *mat = new Matrix;
+
+  const int width = 1;
+  const int height = 5;
+  int value = 10;
+
+  Matrix_init(mat, width, height);
+  Matrix_fill(mat, value);
+
+  // Test every element in the matrix
+  for (int row = 0; row < height; ++row) {
+    for (int col = 0; col < width; ++col) {
+      ASSERT_EQUAL(*Matrix_at(mat, row, col), value);
+    }
+  }
+
+  // Testing min and max within the same values (leftmost)
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat, 0, 0, 1), 0);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat, 0, 0, 1), value);
+  ASSERT_EQUAL(Matrix_max(mat), value);
+
+  delete mat; // delete the Matrix
+
+  // 4 x 1 Matrix
+  Matrix *mat2 = new Matrix;
+
+  const int width2 = 4;
+  const int height2 = 1;
+  int value2 = 11;
+
+  Matrix_init(mat2, width2, height2);
+  Matrix_fill(mat2, value2);
+
+  // Test every element in the matrix
+  for (int row2 = 0; row2 < height2; ++row2) {
+    for (int col2 = 0; col2 < width2; ++col2) {
+      ASSERT_EQUAL(*Matrix_at(mat2, row2, col2), value2);
+    }
+  }
+
+  // Testing min and max within the same values (leftmost)
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 0, 0, 4), 0);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 0, 0, 4), value2);
+  ASSERT_EQUAL(Matrix_max(mat2), value2);
+
+  delete mat2; // delete the Matrix
+
+  // 3 x 3 Matrix
+  Matrix *mat3 = new Matrix;
+
+  const int width3 = 3;
+  const int height3 = 3;
+  int value3 = 13;
+
+  Matrix_init(mat3, width3, height3);
+  Matrix_fill(mat3, value3);
+
+  // Test every element in the matrix
+  for (int row3 = 0; row3 < height3; ++row3) {
+    for (int col3 = 0; col3 < width3; ++col3) {
+      ASSERT_EQUAL(*Matrix_at(mat3, row3, col3), value3);
+    }
+  }
+
+  // Testing min and max within the same values (leftmost)
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat3, 0, 0, 3), 0);
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat3, 2, 0, 3), 0);
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat3, 0, 0, 3), value3);
+  ASSERT_EQUAL(Matrix_max(mat3), value3);
+
+  delete mat3; // delete the Matrix
+}
 
 // NOTE: The unit test framework tutorial in Lab 2 originally
 // had a semicolon after TEST_MAIN(). Although including and
