@@ -62,26 +62,6 @@ TEST(test_image_basic) {
   delete img; // delete the Image
 }
 
-// Test for reading PPM format and getting the pixel
-TEST(test_image_ppm) {
-  Image *img = new Image; // create an Image in dynamic memory
-
-  string fileName = "crabster_70x35.correct.ppm";
-
-  ifstream input(fileName);
-
-  Image_init(img, input);
-  
-  ASSERT_EQUAL(Image_width(img), 70);
-  ASSERT_EQUAL(Image_height(img), 35);
-
-  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 0), {255, 255, 255}));
-  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 22, 1), {181, 137, 143}));
-  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 34, 69), {255, 255, 255}));
-
-  delete img; // delete the Image
-}
-
 TEST(test_image_print) {
   Image *img = new Image; // create an Image in dynamic memory
 
@@ -131,7 +111,92 @@ TEST(test_image_fill) {
   delete img; // delete the Image
 }
 
+TEST(test_image_irr_shapes) {
+  
+  const Pixel yellow = {255, 225, 51};
+  const Pixel white = {255, 255, 255};
 
+  // 1 x 4
+  Image *img = new Image; // create an Image in dynamic memory
+  Image_init(img, 1, 4);
+  Image_fill(img, yellow);
+
+  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 0), yellow));
+  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 1, 0), yellow));
+  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 3, 0), yellow));
+
+  delete img; // delete the Image
+
+  // 4 x 1
+  Image *img2 = new Image; // create an Image in dynamic memory
+  Image_init(img2, 4, 1);
+  Image_fill(img2, white);
+
+  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img2, 0, 0), white));
+  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img2, 0, 2), white));
+  ASSERT_TRUE(Pixel_equal(Image_get_pixel(img2, 0, 3), white));
+
+  delete img2; // delete the Image
+}
+
+TEST(test_image_fill_and_set) {
+  const Pixel green = {0, 255, 0};
+
+  Image *img = new Image;
+  Image_init(img, 2, 2);
+  Image_set_pixel(img, 0, 0, green);
+  Image_set_pixel(img, 0, 1, green);
+  Image_set_pixel(img, 1, 0, green);
+  Image_set_pixel(img, 1, 1, green);
+
+  Image *img2 = new Image;
+  Image_init(img2, 2, 2);
+  Image_fill(img2, green);
+  ASSERT_TRUE(Image_equal(img, img2));
+
+  delete img;
+  delete img2;
+}
+
+TEST(test_image_set_pixel) {
+    Image *img = new Image;
+
+    const Pixel red = {255, 0, 0};
+    const Pixel green = {0, 255, 0};
+    const Pixel blue = {0, 0, 255};
+    const Pixel white = {255, 255, 255};
+
+    Image_init(img, 2, 2);
+    Image_set_pixel(img, 0, 0, red);
+    Image_set_pixel(img, 0, 1, green);
+    Image_set_pixel(img, 1, 0, blue);
+    Image_set_pixel(img, 1, 1, white);
+    
+    ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 0), red));
+    ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 0, 1), green));
+    ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 1, 0), blue));
+    ASSERT_TRUE(Pixel_equal(Image_get_pixel(img, 1, 1), white));
+
+    delete img;
+}
+
+TEST(test_image_read) {
+    
+  Image *img = new Image;
+
+  string input = "P3 2 2 255 255 222 113 0 0 23 245 145 45 10 0 30 \n";
+  istringstream input_ss(input);
+  Image_init(img, input_ss);
+
+  string correct = "P3\n2 2\n255\n255 222 113 0 0 23 \n245 145 45 10 0 30 \n";
+  ostringstream output_ss;
+  Image_print(img, output_ss);
+  string actual = output_ss.str();
+
+  ASSERT_EQUAL(actual, correct);
+
+  delete img;
+}
 
 // NOTE: The unit test framework tutorial in Lab 2 originally
 // had a semicolon after TEST_MAIN(). Although including and

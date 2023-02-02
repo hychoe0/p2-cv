@@ -165,21 +165,6 @@ void compute_vertical_cost_matrix(const Matrix* energy, Matrix *cost) {
       *Matrix_at(cost, row, col) = *Matrix_at(energy, row, col) 
                                   + Matrix_min_value_in_row(cost, row - 1,
                                                             col_start, col_end);
-      
-      // int pixelCost = 0;
-      
-      // if (col == 0){
-      //   pixelCost = *Matrix_at(energy, row, col) + Matrix_min_value_in_row(cost, row - 1, col, col + 2);
-      //   *Matrix_at(cost, row, col) = pixelCost;
-      // }
-      // else if (col == width - 1){
-      //   pixelCost = *Matrix_at(energy, row, col) + Matrix_min_value_in_row(cost, row - 1, col - 1, col + 1);
-      //   *Matrix_at(cost, row, col) = pixelCost;
-      // }
-      // else {
-      //   pixelCost = *Matrix_at(energy, row, col) + Matrix_min_value_in_row(cost, row - 1, col - 1, col + 2);
-      //   *Matrix_at(cost, row, col) = pixelCost;
-      // }
     }
   }
 }

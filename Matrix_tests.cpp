@@ -240,6 +240,8 @@ TEST(test_matrix_max) {
   *Matrix_at(mat1, 0, 4) = 31;
   *Matrix_at(mat1, 2, 0) = 31;
   ASSERT_EQUAL(Matrix_max(mat1), 31);
+
+  delete mat1;
 }
 
 TEST(test_matrix_column_of_min_value_in_row) {
