@@ -152,6 +152,9 @@ TEST(test_matrix_fill_border) {
       if (row == 0 || col == 0 || row == height - 1 || col == width - 1) {
         ASSERT_EQUAL(*Matrix_at(mat, row, col), value);
       }
+      else {
+        ASSERT_EQUAL(*Matrix_at(mat, row, col), 0);
+      }
     }
   }
 
@@ -211,28 +214,28 @@ TEST(test_matrix_max) {
 
   Matrix_init(mat1, width1, height1);
 
-  //Initializing elements to 0s
+  //Initializing elements to 30s
   Matrix_fill(mat1, 30);
 
   // Test Case #2-1 (General 5 x 4)
   *Matrix_at(mat1, 3, 2) = 31;
   ASSERT_EQUAL(Matrix_max(mat1), 31);
 
-  //Initializing elements to 0s
+  //Initializing elements to 30s
   Matrix_fill(mat1, 30);
 
   // Test Case #2-2 (First Edge 5 x 4)
   *Matrix_at(mat1, 0, 0) = 31;
   ASSERT_EQUAL(Matrix_max(mat1), 31);
 
-  //Initializing elements to 0s
+  //Initializing elements to 30s
   Matrix_fill(mat1, 30);
 
   // Test Case #2-2 (Last Edge 5 x 4)
   *Matrix_at(mat1, 3, 4) = 31;
   ASSERT_EQUAL(Matrix_max(mat1), 31);
 
-  //Initializing elements to 0s
+  //Initializing elements to 30s
   Matrix_fill(mat1, 30);
 
   // Test Case #2-3 (Multiple Edges 5 x 4)
@@ -398,6 +401,159 @@ TEST(test_matrix_irr_shapes) {
   ASSERT_EQUAL(Matrix_max(mat3), value3);
 
   delete mat3; // delete the Matrix
+}
+
+TEST(test_matrix_extended) {
+  // Matrix_max
+  Matrix *mat = new Matrix;
+
+  const int width = 4;
+  const int height = 5;
+  Matrix_init(mat, width, height);
+
+  // Fill 4x5 Matrix by negative number and find max
+  // Fill Matrix with negative number
+  Matrix_fill(mat, -5);
+
+  ASSERT_EQUAL(Matrix_max(mat), -5);
+
+  // Change a single element to 0 in each row and find max
+  // General
+  *Matrix_at(mat, 0, 2) = 0;
+  ASSERT_EQUAL(Matrix_max(mat), 0);
+  // Reset
+  *Matrix_at(mat, 0, 2) = -5;
+  ASSERT_EQUAL(Matrix_max(mat), -5);
+  // Edge
+  *Matrix_at(mat, 1, 0) = -1;
+  ASSERT_EQUAL(Matrix_max(mat), -1);
+  // Reset
+  *Matrix_at(mat, 1, 0) = -5;
+  ASSERT_EQUAL(Matrix_max(mat), -5);
+  // Edge (Last)
+  *Matrix_at(mat, 4, 3) = 0;
+  ASSERT_EQUAL(Matrix_max(mat), 0);
+
+  // Fill Matrix with 0s
+  Matrix_fill(mat, 0);
+
+  ASSERT_EQUAL(Matrix_max(mat), 0);
+
+  // General
+  *Matrix_at(mat, 0, 1) = -1;
+  ASSERT_EQUAL(Matrix_max(mat), 0);
+  // Edge
+  *Matrix_at(mat, 0, 3) = -3;
+  ASSERT_EQUAL(Matrix_max(mat), 0);
+
+  delete mat;
+
+  // Matrix_col_min and Matrix_min in a row
+  Matrix *mat2 = new Matrix;
+
+  const int width2 = 5;
+  const int height2 = 4;
+  const int value2 = 2;
+  const int newValue = 1;
+  const int newValue2 = -1;
+
+  Matrix_init(mat2, width2, height2);
+
+  // Initializing the matrix to 2s
+  Matrix_fill(mat2, value2);
+  // Fill Border 5x4 Matrix with newValue (positive)
+  Matrix_fill_border(mat2, newValue);
+
+  // First Row (Border)
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 0, 0, 5), newValue); // whole row
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 0, 0, 4), newValue); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 0, 1, 5), newValue); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 0, 1, 4), newValue); // general
+  
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 0, 0, 5), 0); // whole row
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 0, 0, 4), 0); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 0, 1, 5), 1); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 0, 1, 4), 1); // general
+  
+  // Second Row (Edge)
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 1, 0, 5), newValue); // whole row
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 1, 0, 4), newValue); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 1, 1, 5), newValue); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 1, 1, 4), value2); // general
+
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 1, 0, 5), 0); // whole row
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 1, 0, 4), 0); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 1, 1, 5), 4); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 1, 1, 4), 1); // general
+
+  // Initializing the matrix to 2s
+  Matrix_fill(mat2, value2);
+  // Fill Border 5x4 Matrix with newValue (negative)
+  Matrix_fill_border(mat2, newValue2);
+
+  // Third Row (Edge)
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 2, 0, 5), newValue2); // whole row
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 2, 0, 4), newValue2); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 2, 1, 5), newValue2); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 2, 1, 4), value2); // general
+
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 2, 2, 3), value2); // one value
+
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 2, 0, 5), 0); // whole row
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 2, 0, 4), 0); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 2, 1, 5), 4); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 2, 1, 4), 1); // general
+
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 2, 2, 3), 2); // one value
+
+  // Last Row (Border)
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 3, 0, 5), newValue2); // whole row
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 3, 0, 4), newValue2); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 3, 1, 5), newValue2); // edge
+  ASSERT_EQUAL(Matrix_min_value_in_row(mat2, 3, 1, 4), newValue2); // general
+  
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 3, 0, 5), 0); // whole row
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 3, 0, 4), 0); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 3, 1, 5), 1); // edge
+  ASSERT_EQUAL(Matrix_column_of_min_value_in_row(mat2, 3, 1, 4), 1); // general
+
+  delete mat2; // delete the Matrix2
+}
+
+// Fill, fill border, and set element to different value 
+// to check 6x3 Matrix print and compare with correct output
+TEST(test_matrix_print) {
+
+  Matrix* mat = new Matrix;
+
+  const int width = 6;  
+  const int height = 3;
+  const int value = 1;
+  const int newValue = 4;
+
+  Matrix_init(mat, width, height);
+  Matrix_fill(mat, value);
+  Matrix_fill_border(mat, 5);
+
+  // Setting Edge values (First and Last)
+  *Matrix_at(mat, 0, 0) = newValue;
+  *Matrix_at(mat, 2, 5) = newValue;
+
+  // Setting General value
+  *Matrix_at(mat, 1, 2) = newValue;
+
+  ostringstream correct;
+  correct << "6 3\n"
+          << "4 5 5 5 5 5 \n"
+          << "5 1 4 1 1 5 \n"
+          << "5 5 5 5 5 4 \n";
+
+  ostringstream actual;
+  Matrix_print(mat, actual);
+
+  ASSERT_EQUAL(correct.str(), actual.str());
+
+  delete mat;
 }
 
 // NOTE: The unit test framework tutorial in Lab 2 originally
